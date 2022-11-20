@@ -1,0 +1,75 @@
+* {
+    margin: 0%;
+    padding: 0%;
+    outline: none;
+    color: white;
+}
+
+@font-face {
+    font-family: "Press Start 2P";
+    src: url(PressStart2P-Regular.ttf);
+}
+
+:root {
+    --game-font: 'Press Start 2P', cursive;
+    --button-background: #25292C;
+}
+
+body {
+    height: 100vh;
+    background-color: #171c22;
+    box-sizing: border-box;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+}
+
+#top {
+    height: 85vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1px;
+}
+
+.bar {
+    width: 100%;
+    background-color: white;
+    height: 750px;
+    transition: 400ms ease-in-out;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.value {
+    font-family: var(--game-font);
+    color: black;
+    margin-top: 1rem;
+}
+
+#bottom {
+    height: 15vh;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.button {
+    padding: 1rem;
+    font-size: 2rem;
+    background: var(--button-background);
+    cursor: pointer;
+    font-family: var(--game-font);
+}
+
+input[type="range"] {
+    width: 420px;
+    height: 2px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
