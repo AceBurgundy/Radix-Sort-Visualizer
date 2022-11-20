@@ -46,6 +46,7 @@ main {
 
 .value {
     font-family: var(--game-font);
+    font-size: 0.7rem;
     color: black;
     margin-top: 1rem;
 }
