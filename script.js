@@ -1,25 +1,25 @@
 const throttle = document.getElementById("throttle")
 const generate = document.getElementById("generate-new-array")
 const sort = document.getElementById("sort")
-const sortContainer = document.getElementById("top")
+const barsContainer = document.getElementById("top")
 const minimum = 200
 const maximum = 500
-let sortedListOfIntegers = []
+let numberList = []
 
 function renderBars(size) {
 
-    sortedListOfIntegers = Array(size).fill().map(function random() {
+    numberList = Array.from({ length: size }, function random() {
         return Math.floor(Math.random() * (maximum - minimum) + minimum)
-    })
+    });
 
-    sortedListOfIntegers.forEach(number => {
+    numberList.forEach(number => {
         randomizeSortedArray()
         const bar = document.createElement("div")
         bar.className = "bar"
         bar.id = number
         bar.style.height = `${number* 1.5}px`
 
-        sortContainer.appendChild(bar)
+        barsContainer.appendChild(bar)
     })
 }
 
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 function randomizeSortedArray() {
-    sortedListOfIntegers.sort(function() {
+    numberList.sort(function() {
         return .7 - Math.random()
     })
 }
@@ -50,12 +50,12 @@ function showButtons() {
 }
 
 generate.addEventListener("click", () => {
-    Array.from(sortContainer.children).map((bar) => bar.remove())
+    Array.from(barsContainer.children).map((bar) => bar.remove())
     renderBars(maximum)
 })
 
 throttle.addEventListener("change", (event) => {
-    Array.from(sortContainer.children).map((bar) => bar.remove())
+    Array.from(barsContainer.children).map((bar) => bar.remove())
     renderBars(parseInt(event.target.value))
 });
 
@@ -65,75 +65,86 @@ sort.addEventListener("click", async() => {
 
     hideButtons()
 
-    const maxNumber = Math.max(...sortedListOfIntegers) * 10;
+    const maxNumber = Math.max(...numberList) * 10;
 
-    let divisor = 10;
+    let base = 10;
 
-    while (divisor < maxNumber) {
+    while (base < maxNumber) {
 
-        for (let index = 0; index < sortedListOfIntegers.length; index++) {
-            if (sortedListOfIntegers.length <= 40) {
+        for (let index = 0; index < numberList.length; index++) {
+            if (numberList.length <= 40) {
                 const value = document.createElement("div")
                 value.className = "value"
-                value.textContent = sortedListOfIntegers[index]
-                sortContainer.children[index].appendChild(value)
+                value.textContent = numberList[index]
+                barsContainer.children[index].appendChild(value)
             }
         }
 
-        Array.from(sortContainer.children).map((bar) => bar.style.backgroundColor = "white");
+        Array.from(barsContainer.children).map((bar) => bar.style.backgroundColor = "white");
 
-        let buckets = Array(10).fill().map(() => []);
+        let occurenceCounter = Array.from({ length: 10 }, () => []);
 
-        for (let significantDigit of sortedListOfIntegers) {
+        for (let significantDigit of numberList) {
 
-            buckets[Math.floor((significantDigit % divisor) / (divisor / 10))].push(significantDigit);
+            occurenceCounter[Math.floor((significantDigit % base) / (base / 10))].push(significantDigit);
 
-            if (divisor == 10 && document.getElementById(significantDigit) != null) {
-                document.getElementById(significantDigit).style.backgroundColor = "green"
-            }
-
-            if (divisor == 100 && document.getElementById(significantDigit) != null) {
-                document.getElementById(significantDigit).style.backgroundColor = "orange"
-            }
-
-            if (divisor == 1000 && document.getElementById(significantDigit) != null) {
-                document.getElementById(significantDigit).style.backgroundColor = "red"
+            if (document.getElementById(significantDigit) != null) {
+                switch (base) {
+                    case 10:
+                        document.getElementById(significantDigit).style.backgroundColor = "green"
+                        break;
+                    case 100:
+                        document.getElementById(significantDigit).style.backgroundColor = "orange"
+                        break;
+                    case 1000:
+                        document.getElementById(significantDigit).style.backgroundColor = "red"
+                        break;
+                }
             }
 
             await sleep(speed)
-            Array.from(sortContainer.children).map((bar, index) => bar.style.height = `${sortedListOfIntegers[index++]* 1.5}px`)
+
+            if (base != 10) {
+                Array.from(barsContainer.children).map((bar, index) => bar.style.height = `${numberList[index++]* 1.5}px`)
+            }
+
         }
 
-        sortedListOfIntegers = [].concat.apply([], buckets);
+        numberList = occurenceCounter.flat();
 
-        console.table(buckets);
-
-        if (sortedListOfIntegers.length <= 40) {
-            Array.from(sortContainer.children).map((bar) => bar.children[0].remove())
+        //remove text inside bars
+        if (numberList.length <= 40) {
+            Array.from(barsContainer.children).map((bar) => bar.children[0].remove())
         }
 
         await sleep(speed)
 
-        divisor *= 10;
+        base *= 10;
     }
 
-    Array.from(sortContainer.children).map((bar, index) => bar.style.height = `${sortedListOfIntegers[index++]* 1.5}px`)
+    Array.from(barsContainer.children).forEach((bar, index) => {
+        bar.style.height = `${numberList[index++] * 1.5}px`
+    })
 
-    for (let bar of sortContainer.children) {
+    for (let bar of barsContainer.children) {
         bar.style.backgroundColor = "green";
-        await sleep(speed)
+        await sleep(10)
     }
 
-    Array.from(sortContainer.children).map((bar) => bar.style.backgroundColor = "white");
+    await sleep(400)
 
-    for (let index = 0; index < sortedListOfIntegers.length; index++) {
-        if (sortedListOfIntegers.length <= 40) {
+    Array.from(barsContainer.children).map(bar => bar.style.backgroundColor = "white")
+
+    //show all numbers after everything is completed only when length is 40
+    if (numberList.length <= 40) {
+        numberList.forEach((number, index) => {
             const value = document.createElement("div")
             value.className = "value"
-            value.textContent = sortedListOfIntegers[index]
-            sortContainer.children[index].appendChild(value)
-        }
+            value.textContent = numberList[index]
+            barsContainer.children[index].appendChild(value)
+        })
     }
+
     showButtons()
 
 })
