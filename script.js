@@ -80,8 +80,6 @@ sort.addEventListener("click", async() => {
             }
         }
 
-        Array.from(barsContainer.children).map((bar) => bar.style.backgroundColor = "white");
-
         let occurenceCounter = Array.from({ length: 10 }, () => []);
 
         for (let significantDigit of numberList) {
@@ -104,13 +102,18 @@ sort.addEventListener("click", async() => {
 
             await sleep(speed)
 
-            if (base != 10) {
-                Array.from(barsContainer.children).map((bar, index) => bar.style.height = `${numberList[index++]* 1.5}px`)
-            }
-
         }
 
         numberList = occurenceCounter.flat();
+
+        for (let index = 0; index < barsContainer.children.length; index++) {
+            barsContainer.children[index].style.height = `${numberList[index]* 1.5}px`
+            barsContainer.children[index].style.backgroundColor = "black"
+            await sleep(20)
+            setTimeout(() => {
+                barsContainer.children[index].style.backgroundColor = "white"
+            }, 20);
+        }
 
         //remove text inside bars
         if (numberList.length <= 40) {
@@ -121,10 +124,6 @@ sort.addEventListener("click", async() => {
 
         base *= 10;
     }
-
-    Array.from(barsContainer.children).forEach((bar, index) => {
-        bar.style.height = `${numberList[index++] * 1.5}px`
-    })
 
     for (let bar of barsContainer.children) {
         bar.style.backgroundColor = "green";
