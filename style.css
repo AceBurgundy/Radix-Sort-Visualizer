@@ -38,7 +38,7 @@ main {
     width: 100%;
     background-color: white;
     height: 750px;
-    transition: 400ms ease-in-out;
+    transition: 50ms ease-in-out;
     display: flex;
     align-items: flex-start;
     justify-content: center;
