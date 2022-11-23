@@ -112,26 +112,26 @@ sort.addEventListener("click", async() => {
                         playNote(50 + significantDigit * 10);
                         setTimeout(() => {
                             document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "white"
-                        }, 80)
+                        }, 250)
                         break;
                     case 100:
                         document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "orange"
                         playNote(50 + significantDigit * 10);
                         setTimeout(() => {
                             document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "white"
-                        }, 80)
+                        }, 250)
                         break;
                     case 1000:
                         document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "red"
                         playNote(50 + significantDigit * 10);
                         setTimeout(() => {
                             document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "white"
-                        }, 80)
+                        }, 250)
                         break;
                 }
             }
 
-            await sleep(0.1)
+            await sleep(10)
 
         }
 
@@ -148,13 +148,13 @@ sort.addEventListener("click", async() => {
                 await sleep(0.1)
                 setTimeout(() => {
                     barsContainer.children[index].style.backgroundColor = "green"
-                }, 01)
+                }, 0.1)
             } else {
                 playNote(50 + numberList[index] * 10);
-                await sleep(01)
+                await sleep(0.1)
                 setTimeout(() => {
                     barsContainer.children[index].style.backgroundColor = "white"
-                }, 01)
+                }, 0.1)
             }
         }
 
