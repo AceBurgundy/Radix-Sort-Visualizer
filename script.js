@@ -112,21 +112,21 @@ sort.addEventListener("click", async() => {
                         playNote(50 + significantDigit * 10);
                         setTimeout(() => {
                             document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "white"
-                        }, 250)
+                        }, 100)
                         break;
                     case 100:
                         document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "orange"
                         playNote(50 + significantDigit * 10);
                         setTimeout(() => {
                             document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "white"
-                        }, 250)
+                        }, 100)
                         break;
                     case 1000:
                         document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "red"
                         playNote(50 + significantDigit * 10);
                         setTimeout(() => {
                             document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "white"
-                        }, 250)
+                        }, 100)
                         break;
                 }
             }
