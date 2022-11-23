@@ -2,7 +2,7 @@ const throttle = document.getElementById("throttle")
 const generate = document.getElementById("generate-new-array")
 const sort = document.getElementById("sort")
 const barsContainer = document.getElementById("top")
-const minimum = 50
+const minimum = 80
 const maximum = 300
 let numberList = []
 
