@@ -9,8 +9,10 @@ let numberList = []
 function renderBars(size) {
 
     numberList = Array.from({ length: size }, function random() {
-        return Math.floor(Math.random() * (maximum - minimum) + minimum)
+        return minimum += 1;
     });
+    
+    numberList.sort(() => Math.random() - 0.5)
 
     numberList.forEach(number => {
         randomizeSortedArray()
