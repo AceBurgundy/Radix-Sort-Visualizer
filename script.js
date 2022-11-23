@@ -8,7 +8,7 @@ let numberList = []
 
 function renderBars(size) {
 
-    numberList = Array.from({ length: size }, function random() {
+    numberList = Array.from({ length: size }, () => {
         return minimum += 1;
     });
     
