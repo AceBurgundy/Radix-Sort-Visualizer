@@ -2,6 +2,7 @@ const throttle = document.getElementById("throttle")
 const generate = document.getElementById("generate-new-array")
 const sort = document.getElementById("sort")
 const barsContainer = document.getElementById("top")
+let audioContext = null;
 const minimum = 100
 const maximum = 200
 let numberList = []
@@ -16,9 +17,8 @@ function renderBars(size) {
         randomizeSortedArray()
         const bar = document.createElement("div")
         bar.className = "bar"
-        bar.id = number
         bar.style.height = `${number* 2.5}px`
-
+        bar.dataset.height = number
         barsContainer.appendChild(bar)
     })
 }
@@ -49,6 +49,23 @@ function showButtons() {
     throttle.style.display = "block"
 }
 
+function playNote(frequency) {
+
+    if (audioContext == null) {
+        audioContext = new(AudioContext || webkitAudioContext || window.webkitAudioContext)()
+    }
+
+    const duration = 0.1;
+    const oscillator = audioContext.createOscillator()
+    const node = audioContext.createGain()
+    oscillator.frequency.value = frequency
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + duration)
+    node.gain.value = 0.1
+    oscillator.connect(node)
+    node.connect(audioContext.destination)
+
+}
 generate.addEventListener("click", () => {
     Array.from(barsContainer.children).map((bar) => bar.remove())
     renderBars(maximum)
@@ -61,15 +78,17 @@ throttle.addEventListener("change", (event) => {
 
 sort.addEventListener("click", async() => {
 
-    let speed = 10;
-
     hideButtons()
 
     const maxNumber = Math.max(...numberList) * 10;
 
     let base = 10;
 
+    iteration = 0;
+
     while (base < maxNumber) {
+
+        iteration++;
 
         for (let index = 0; index < numberList.length; index++) {
             if (numberList.length <= 40) {
@@ -86,48 +105,69 @@ sort.addEventListener("click", async() => {
 
             occurenceCounter[Math.floor((significantDigit % base) / (base / 10))].push(significantDigit);
 
-            if (document.getElementById(significantDigit) != null) {
+            if (document.querySelector(`[data-height="${significantDigit}"]`) != null) {
                 switch (base) {
                     case 10:
-                        document.getElementById(significantDigit).style.backgroundColor = "green"
+                        document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "green"
+                        playNote(50 + significantDigit * 10);
+                        setTimeout(() => {
+                            document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "white"
+                        }, 80)
                         break;
                     case 100:
-                        document.getElementById(significantDigit).style.backgroundColor = "orange"
+                        document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "orange"
+                        playNote(50 + significantDigit * 10);
+                        setTimeout(() => {
+                            document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "white"
+                        }, 80)
                         break;
                     case 1000:
-                        document.getElementById(significantDigit).style.backgroundColor = "red"
+                        document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "red"
+                        playNote(50 + significantDigit * 10);
+                        setTimeout(() => {
+                            document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "white"
+                        }, 80)
                         break;
                 }
             }
 
-            await sleep(speed)
+            await sleep(0.1)
 
         }
 
-        numberList = occurenceCounter.flat();
+        numberList = occurenceCounter.flat()
 
         for (let index = 0; index < barsContainer.children.length; index++) {
-            barsContainer.children[index].style.height = `${numberList[index]* 2.5}px`
+
+            barsContainer.children[index].setAttribute("barValue", numberList[index])
+
+            barsContainer.children[index].style.height = `${numberList[index] * 2.5}px`
             barsContainer.children[index].style.backgroundColor = "black"
-            await sleep(20)
-            setTimeout(() => {
-                barsContainer.children[index].style.backgroundColor = "white"
-            }, 20);
+            if (iteration == 3) {
+                playNote(50 + numberList[index] * 10);
+                await sleep(0.1)
+                setTimeout(() => {
+                    barsContainer.children[index].style.backgroundColor = "green"
+                }, 01)
+            } else {
+                playNote(50 + numberList[index] * 10);
+                await sleep(01)
+                setTimeout(() => {
+                    barsContainer.children[index].style.backgroundColor = "white"
+                }, 01)
+            }
         }
 
-        //remove text inside bars
+        // remove text inside bars
         if (numberList.length <= 40) {
-            Array.from(barsContainer.children).map((bar) => bar.children[0].remove())
+            barsContainer.innerHTML = ""
         }
-
-        await sleep(speed)
 
         base *= 10;
-    }
 
-    for (let bar of barsContainer.children) {
-        bar.style.backgroundColor = "green";
-        await sleep(10)
+        if (numberList.length < 100 && iteration == 2) {
+            break;
+        }
     }
 
     await sleep(400)
