@@ -2,22 +2,22 @@ const throttle = document.getElementById("throttle")
 const generate = document.getElementById("generate-new-array")
 const sort = document.getElementById("sort")
 const barsContainer = document.getElementById("top")
-const minimum = 80
-const maximum = 300
+const minimum = 100
+const maximum = 200
 let numberList = []
 
 function renderBars(size) {
 
-    numberList = Array.from({ length: size }, function random() {
-        return Math.floor(Math.random() * (maximum - minimum) + minimum)
+    numberList = Array.from({ length: size }, (value, index) => {
+        return index += 100;
     });
-    
+
     numberList.forEach(number => {
         randomizeSortedArray()
         const bar = document.createElement("div")
         bar.className = "bar"
         bar.id = number
-        bar.style.height = `${number* 1.5}px`
+        bar.style.height = `${number* 2.5}px`
 
         barsContainer.appendChild(bar)
     })
@@ -107,7 +107,7 @@ sort.addEventListener("click", async() => {
         numberList = occurenceCounter.flat();
 
         for (let index = 0; index < barsContainer.children.length; index++) {
-            barsContainer.children[index].style.height = `${numberList[index]* 1.5}px`
+            barsContainer.children[index].style.height = `${numberList[index]* 2.5}px`
             barsContainer.children[index].style.backgroundColor = "black"
             await sleep(20)
             setTimeout(() => {
