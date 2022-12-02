@@ -17,7 +17,7 @@ function renderBars(size) {
         randomizeSortedArray()
         const bar = document.createElement("div")
         bar.className = "bar"
-        bar.style.height = `${number* 2.5}px`
+        bar.style.height = `${number / 2.5}%`
         bar.dataset.height = number
         barsContainer.appendChild(bar)
     })
@@ -90,15 +90,6 @@ sort.addEventListener("click", async() => {
 
         iteration++;
 
-        for (let index = 0; index < numberList.length; index++) {
-            if (numberList.length <= 40) {
-                const value = document.createElement("div")
-                value.className = "value"
-                value.textContent = numberList[index]
-                barsContainer.children[index].appendChild(value)
-            }
-        }
-
         let occurenceCounter = Array.from({ length: 10 }, () => []);
 
         for (let significantDigit of numberList) {
@@ -141,7 +132,7 @@ sort.addEventListener("click", async() => {
 
             barsContainer.children[index].setAttribute("barValue", numberList[index])
 
-            barsContainer.children[index].style.height = `${numberList[index] * 2.5}px`
+            barsContainer.children[index].style.height = `${numberList[index] / 2.5}%`
             barsContainer.children[index].style.backgroundColor = "black"
             if (iteration == 3) {
                 playNote(50 + numberList[index] * 10);
@@ -173,16 +164,6 @@ sort.addEventListener("click", async() => {
     await sleep(400)
 
     Array.from(barsContainer.children).map(bar => bar.style.backgroundColor = "white")
-
-    //show all numbers after everything is completed only when length is 40
-    if (numberList.length <= 40) {
-        numberList.forEach((number, index) => {
-            const value = document.createElement("div")
-            value.className = "value"
-            value.textContent = numberList[index]
-            barsContainer.children[index].appendChild(value)
-        })
-    }
 
     showButtons()
 
