@@ -85,75 +85,42 @@ sort.addEventListener("click", async() => {
         let occurenceCounter = Array.from({ length: 10 }, () => []);
 
         for (let significantDigit of numberList) {
-
             occurenceCounter[Math.floor((significantDigit % base) / (base / 10))].push(significantDigit);
-
-            if (document.querySelector(`[data-height="${significantDigit}"]`) != null) {
-                switch (base) {
-                    case 10:
-                        document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "green"
-                        playNote(50 + significantDigit * 10);
-                        setTimeout(() => {
-                            document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "white"
-                        }, 100)
-                        break;
-                    case 100:
-                        document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "orange"
-                        playNote(50 + significantDigit * 10);
-                        setTimeout(() => {
-                            document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "white"
-                        }, 100)
-                        break;
-                    case 1000:
-                        document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "red"
-                        playNote(50 + significantDigit * 10);
-                        setTimeout(() => {
-                            document.querySelector(`[data-height="${significantDigit}"]`).style.backgroundColor = "white"
-                        }, 100)
-                        break;
-                }
-            }
-
-            await sleep(10)
-
         }
 
         numberList = occurenceCounter.flat()
 
         for (let index = 0; index < barsContainer.children.length; index++) {
 
-            barsContainer.children[index].setAttribute("barValue", numberList[index])
+            currentBar = barsContainer.children[index]
+            currentBar.setAttribute("barValue", numberList[index])
+            currentBar.style.height = `${numberList[index] / 2}%`
+            currentBar.style.backgroundColor = "black"
 
-            barsContainer.children[index].style.height = `${numberList[index] / 2}%`
-            barsContainer.children[index].style.backgroundColor = "black"
-            if (iteration == 3) {
-                playNote(50 + numberList[index] * 10);
-                await sleep(0.1)
-                setTimeout(() => {
+            switch (iteration) {
+                case 1:
+                    barsContainer.children[index].style.backgroundColor = "red"
+                    break;
+                case 2:
+                    barsContainer.children[index].style.backgroundColor = "orange"
+                    break;
+                case 3:
                     barsContainer.children[index].style.backgroundColor = "green"
-                }, 0.1)
-            } else {
-                playNote(50 + numberList[index] * 10);
-                await sleep(0.1)
-                setTimeout(() => {
-                    barsContainer.children[index].style.backgroundColor = "white"
-                }, 0.1)
+                    break;
             }
-        }
-
-        // remove text inside bars
-        if (numberList.length <= 40) {
-            barsContainer.innerHTML = ""
+            playNote(50 + numberList[index] * 10);
+            await sleep(0.1)
+            setTimeout(() => {
+                if (iteration < 3) {
+                    barsContainer.children[index].style.backgroundColor = "white"
+                }
+            }, 0.1)
         }
 
         base *= 10;
-
-        if (numberList.length < 100 && iteration == 2) {
-            break;
-        }
     }
 
-    await sleep(400)
+    // await sleep(10)
 
     Array.from(barsContainer.children).map(bar => bar.style.backgroundColor = "white")
 
