@@ -71,5 +71,8 @@ main {
     font-size: calc(16px + 2 * ((10vw) / 30));
     background: var(--button-background);
     cursor: pointer;
+    height: 60%;
     font-family: var(--game-font);
+    display: flex;
+    align-items: center;
 }
