@@ -68,16 +68,8 @@ main {
 
 .button {
     padding: 1rem;
-    font-size: 2rem;
+    font-size: calc(16px + 2 * ((10vw) / 30));
     background: var(--button-background);
     cursor: pointer;
     font-family: var(--game-font);
-}
-
-input[type="range"] {
-    width: 420px;
-    height: 2px;
-    border: none;
-    outline: none;
-    cursor: pointer;
 }

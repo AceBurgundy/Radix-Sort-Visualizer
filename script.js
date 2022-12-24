@@ -1,10 +1,9 @@
-const throttle = document.getElementById("throttle")
 const generate = document.getElementById("generate-new-array")
 const sort = document.getElementById("sort")
 const barsContainer = document.getElementById("top")
 let audioContext = null;
 const minimum = 100
-const maximum = 200
+const maximum = 150
 let numberList = []
 
 function renderBars(size) {
@@ -17,7 +16,7 @@ function renderBars(size) {
         randomizeSortedArray()
         const bar = document.createElement("div")
         bar.className = "bar"
-        bar.style.height = `${number / 2.5}%`
+        bar.style.height = `${number / 2}%`
         bar.dataset.height = number
         barsContainer.appendChild(bar)
     })
@@ -40,13 +39,11 @@ function sleep(ms) {
 function hideButtons() {
     generate.style.display = "none"
     sort.style.display = "none"
-    throttle.style.display = "none"
 }
 
 function showButtons() {
     generate.style.display = "block"
     sort.style.display = "block";
-    throttle.style.display = "block"
 }
 
 function playNote(frequency) {
@@ -70,11 +67,6 @@ generate.addEventListener("click", () => {
     Array.from(barsContainer.children).map((bar) => bar.remove())
     renderBars(maximum)
 })
-
-throttle.addEventListener("change", (event) => {
-    Array.from(barsContainer.children).map((bar) => bar.remove())
-    renderBars(parseInt(event.target.value))
-});
 
 sort.addEventListener("click", async() => {
 
@@ -132,7 +124,7 @@ sort.addEventListener("click", async() => {
 
             barsContainer.children[index].setAttribute("barValue", numberList[index])
 
-            barsContainer.children[index].style.height = `${numberList[index] / 2.5}%`
+            barsContainer.children[index].style.height = `${numberList[index] / 2}%`
             barsContainer.children[index].style.backgroundColor = "black"
             if (iteration == 3) {
                 playNote(50 + numberList[index] * 10);
@@ -168,3 +160,9 @@ sort.addEventListener("click", async() => {
     showButtons()
 
 })
+
+if (window.screen.availHeight > window.screen.availWidth) {
+    document.getElementById("bottom").style.flexDirection = "column";
+    sort.style.marginBottom = "5px";
+    generate.style.marginBottom = "10px";
+}
